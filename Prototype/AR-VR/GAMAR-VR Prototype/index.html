@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamar AR Headset HUD</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #02040f;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <a-scene
+    background="color: #030614"
+    renderer="antialias: true; colorManagement: true; physicallyCorrectLights: true"
+    vr-mode-ui="enabled: true"
+    cursor="rayOrigin: mouse"
+    raycaster="objects: .clickable">
+    <a-assets>
+      <img id="gameplay" src="assets/game.png">
+      <img id="minimap" src="assets/map.jpg">
+      <img id="champion1" src="assets/champion1.png">
+      <img id="champion2" src="assets/champion2.png">
+      <img id="champion3" src="assets/champion3.png">
+      <img id="item1" src="assets/item1.png">
+      <img id="item2" src="assets/item2.png">
+      <img id="item3" src="assets/item3.png">
+      <img id="rank1" src="assets/rank1.png">
+      <img id="logo" src="assets/logo.png">
+      <img id="ability1" src="assets/abilitie1.png">
+      <img id="ability2" src="assets/abilitie2.png">
+      <img id="ability3" src="assets/abilitie3.png">
+      <img id="ability4" src="assets/abilitie4.png">
+    </a-assets>
+
+    <a-entity light="type: ambient; color: #dbeafe; intensity: 0.55"></a-entity>
+    <a-entity light="type: point; color: #20d9ff; intensity: 1.1; distance: 16" position="-2.8 3 -1.5"></a-entity>
+    <a-entity light="type: point; color: #9b4dff; intensity: 0.85; distance: 14" position="3 2.2 -2.2"></a-entity>
+    <a-entity light="type: point; color: #f6c945; intensity: 0.42; distance: 10" position="0 1.2 -1.4"></a-entity>
+
+    <a-camera position="0 1.65 0">
+      <a-cursor
+        color="#22d3ee"
+        fuse="false"
+        geometry="primitive: ring; radiusInner: 0.008; radiusOuter: 0.014"
+        material="shader: flat; opacity: 0.9"
+        raycaster="objects: .clickable">
+      </a-cursor>
+    </a-camera>
+
+    <a-entity id="space" position="0 1.48 -3.35">
+      <a-entity id="hud"></a-entity>
+    </a-entity>
+
+    <script>
+      const hud = document.querySelector('#hud');
+
+      const colors = {
+        panel: '#071126',
+        panel2: '#091833',
+        cyan: '#19d8ff',
+        blue: '#3b82f6',
+        purple: '#9b4dff',
+        red: '#ff4b5f',
+        green: '#20f58a',
+        gold: '#f7c51e',
+        text: '#edf6ff',
+        muted: '#9fb0c9',
+        line: '#23334f'
+      };
+
+      const items = [
+        {
+          icon: '#item1',
+          title: 'Kraken Slayer',
+          cost: '700g needed',
+          stats: '+ Attack Damage\n+ Attack Speed\n+ Critical Strike',
+          note: 'Best when ahead in lane.'
+        },
+        {
+          icon: '#item2',
+          title: "Luden's Tempest",
+          cost: '1200g needed',
+          stats: '+ Burst damage\n+ Ability Haste\n+ Wave clear',
+          note: 'Enemy mid power spike detected.'
+        },
+        {
+          icon: '#item3',
+          title: 'Infinity Edge',
+          cost: '1900g needed',
+          stats: '+ Crit multiplier\n+ Teamfight damage\n+ Carry scaling',
+          note: 'Finish after second core item.'
+        }
+      ];
+
+      function el(tag, attrs = {}, parent = hud) {
+        const node = document.createElement(tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+        parent.appendChild(node);
+        return node;
+      }
+
+      function entity(attrs = {}, parent = hud) {
+        return el('a-entity', attrs, parent);
+      }
+
+      function plane(parent, attrs = {}) {
+        return el('a-plane', {
+          color: attrs.color || colors.panel,
+          width: attrs.width || 1,
+          height: attrs.height || 1,
+          position: attrs.position || '0 0 0',
+          rotation: attrs.rotation || '0 0 0',
+          material: attrs.material || 'shader: flat; transparent: true; opacity: 0.92; side: double'
+        }, parent);
+      }
+
+      function text(parent, value, x, y, z, options = {}) {
+        const readableWidth = options.readableWidth || (options.width || 1) * 2.7;
+        return el('a-text', {
+          ...(options.id ? { id: options.id } : {}),
+          ...(options.class ? { class: options.class } : {}),
+          value,
+          position: `${x} ${y} ${z}`,
+          align: options.align || 'left',
+          color: options.color || colors.text,
+          width: readableWidth,
+          wrapCount: options.wrapCount || 24,
+          scale: options.scale || '1 1 1',
+          baseline: 'center'
+        }, parent);
+      }
+
+      function image(parent, src, x, y, z, width, height, attrs = {}) {
+        return el('a-image', {
+          src,
+          position: `${x} ${y} ${z}`,
+          width,
+          height,
+          material: attrs.material || 'shader: flat; transparent: true; opacity: 1'
+        }, parent);
+      }
+
+      function panel(id, x, y, z, w, h, rotation = '0 0 0', accent = colors.cyan) {
+        const group = entity({ id, position: `${x} ${y} ${z}`, rotation });
+        plane(group, {
+          width: w + 0.08,
+          height: h + 0.08,
+          color: accent,
+          position: '0 0 -0.012',
+          material: 'shader: flat; transparent: true; opacity: 0.2; side: double'
+        });
+        plane(group, {
+          width: w,
+          height: h,
+          color: colors.panel,
+          material: 'shader: flat; transparent: true; opacity: 0.78; side: double'
+        });
+        plane(group, {
+          width: w - 0.06,
+          height: h - 0.06,
+          color: colors.panel2,
+          position: '0 0 0.006',
+          material: 'shader: flat; transparent: true; opacity: 0.26; side: double'
+        });
+        return group;
+      }
+
+      function divider(parent, y, w) {
+        plane(parent, {
+          width: w,
+          height: 0.01,
+          position: `0 ${y} 0.03`,
+          color: colors.line,
+          material: 'shader: flat; transparent: true; opacity: 0.8'
+        });
+      }
+
+      function pill(parent, label, x, y, w, color, textColor = colors.text) {
+        plane(parent, {
+          width: w,
+          height: 0.16,
+          position: `${x} ${y} 0.04`,
+          color,
+          material: 'shader: flat; transparent: true; opacity: 0.62'
+        });
+        text(parent, label, x, y, 0.06, { align: 'center', color: textColor, width: w + 0.15 });
+      }
+
+      function statRow(parent, label, value, y, color = colors.text) {
+        text(parent, label, -0.55, y, 0.05, { color: colors.muted, width: 0.74 });
+        text(parent, value, 0.54, y, 0.05, { align: 'right', color, width: 0.64 });
+      }
+
+      function playerRow(parent, data, y, team = 'ally') {
+        const accent = team === 'ally' ? colors.cyan : colors.red;
+        const rowGroup = entity({ position: `0 ${y} 0` }, parent);
+        plane(parent, {
+          width: 1.34,
+          height: 0.27,
+          position: `0 ${y} 0.035`,
+          color: team === 'ally' ? '#05263b' : '#2b0b19',
+          material: 'shader: flat; transparent: true; opacity: 0.72'
+        });
+        plane(parent, {
+          width: 0.04,
+          height: 0.27,
+          position: `-0.67 ${y} 0.055`,
+          color: accent,
+          material: 'shader: flat; transparent: true; opacity: 0.95'
+        });
+        image(parent, data.icon, -0.54, y + 0.01, 0.06, 0.16, 0.16);
+        text(parent, data.name, -0.43, y + 0.055, 0.07, { width: 0.64 });
+        text(parent, `KDA ${data.kda}`, -0.43, y - 0.045, 0.07, { color: colors.muted, width: 0.58 });
+        text(parent, data.gold, 0.55, y + 0.01, 0.07, { align: 'right', color: team === 'ally' ? colors.green : colors.gold, width: 0.42 });
+        const hit = plane(rowGroup, {
+          width: 1.34,
+          height: 0.27,
+          position: '0 0 0.1',
+          color: '#ffffff',
+          material: 'shader: flat; transparent: true; opacity: 0; depthWrite: false'
+        });
+        hit.classList.add('clickable');
+        hit.addEventListener('mouseenter', () => rowGroup.setAttribute('scale', '1.03 1.03 1.03'));
+        hit.addEventListener('mouseleave', () => rowGroup.setAttribute('scale', '1 1 1'));
+        hit.addEventListener('click', () => showProfileModal(data, team));
+      }
+
+      function buildItem(parent, item, x, y, size = 0.28) {
+        const group = entity({ class: 'clickable', position: `${x} ${y} 0.06` }, parent);
+        const hit = plane(group, {
+          width: size + 0.05,
+          height: size + 0.05,
+          color: colors.cyan,
+          material: 'shader: flat; transparent: true; opacity: 0.22'
+        });
+        hit.classList.add('clickable');
+        image(group, item.icon, 0, 0, 0.02, size, size);
+        hit.addEventListener('mouseenter', () => group.setAttribute('scale', '1.08 1.08 1.08'));
+        hit.addEventListener('mouseleave', () => group.setAttribute('scale', '1 1 1'));
+        hit.addEventListener('click', () => showItemModal(item));
+        return group;
+      }
+
+      function navIcon(parent, label, x, active = false) {
+        plane(parent, {
+          width: 0.42,
+          height: 0.16,
+          position: `${x} 0 0.06`,
+          color: active ? colors.cyan : '#111827',
+          material: `shader: flat; transparent: true; opacity: ${active ? 0.45 : 0.72}`
+        });
+        text(parent, label, x, 0, 0.08, { align: 'center', color: active ? colors.cyan : colors.muted, width: 0.38, readableWidth: 0.42, wrapCount: 10 });
+      }
+
+      function makeCentralScreen() {
+        const main = panel('main-screen', 0, 0.1, 0, 3.9, 2.45, '0 0 0', colors.cyan);
+        image(main, '#gameplay', 0, -0.05, 0.04, 3.62, 2.05, {
+          material: 'shader: flat; transparent: true; opacity: 0.9'
+        });
+        plane(main, {
+          width: 3.68,
+          height: 2.1,
+          position: '0 -0.05 0.065',
+          color: '#020614',
+          material: 'shader: flat; transparent: true; opacity: 0.1'
+        });
+
+        const score = entity({ position: '0 1.32 0.08' }, main);
+        plane(score, {
+          width: 2.0,
+          height: 0.34,
+          color: '#071126',
+          material: 'shader: flat; transparent: true; opacity: 0.88'
+        });
+        [
+          ['ALLY GOLD', '42.3k', colors.cyan, -0.78],
+          ['ALLY KILLS', '23', colors.cyan, -0.25],
+          ['ENEMY KILLS', '17', colors.red, 0.25],
+          ['ENEMY GOLD', '37.8k', colors.gold, 0.78]
+        ].forEach(([label, value, color, x]) => {
+          plane(score, {
+            width: 0.45,
+            height: 0.24,
+            position: `${x} 0 0.03`,
+            color: '#0b1730',
+            material: 'shader: flat; transparent: true; opacity: 0.86'
+          });
+          text(score, label, x, 0.055, 0.06, { align: 'center', color: colors.muted, readableWidth: 0.92, wrapCount: 10 });
+          text(score, value, x, -0.065, 0.06, { align: 'center', color, readableWidth: 1.18, wrapCount: 6 });
+        });
+
+        const time = entity({ position: '0 1.02 0.08' }, main);
+        plane(time, {
+          width: 0.62,
+          height: 0.16,
+          color: '#020614',
+          material: 'shader: flat; transparent: true; opacity: 0.72'
+        });
+        text(time, '21:35', 0, 0, 0.02, { align: 'center', color: colors.text, width: 0.42 });
+
+        const bottom = entity({ position: '0 -1.11 0.1' }, main);
+        plane(bottom, {
+          width: 3.16,
+          height: 0.38,
+          color: '#06101f',
+          material: 'shader: flat; transparent: true; opacity: 0.9'
+        });
+        image(bottom, '#champion2', -1.35, 0.03, 0.04, 0.34, 0.34);
+        ['#ability1', '#ability2', '#ability3', '#ability4'].forEach((abilityIcon, index) => {
+          const x = -0.82 + index * 0.25;
+          plane(bottom, {
+            width: 0.2,
+            height: 0.2,
+            position: `${x} 0.06 0.04`,
+            color: index === 3 ? colors.purple : colors.blue,
+            material: 'shader: flat; transparent: true; opacity: 0.72'
+          });
+          image(bottom, abilityIcon, x, 0.06, 0.065, 0.18, 0.18);
+        });
+        buildItem(bottom, items[0], 0.48, 0.06, 0.18);
+        buildItem(bottom, items[1], 0.72, 0.06, 0.18);
+        buildItem(bottom, items[2], 0.96, 0.06, 0.18);
+        text(bottom, '1254g', 1.35, 0.04, 0.06, { align: 'right', color: colors.gold, width: 0.44 });
+      }
+
+      function makeLeftStack() {
+        const top = panel('ally-insights', -2.72, 0.22, 0.16, 1.45, 1.72, '0 16 0', colors.purple);
+        text(top, 'ALLY INSIGHTS', -0.58, 0.72, 0.05, { color: colors.cyan, width: 0.74 });
+        divider(top, 0.58, 1.16);
+        [
+          { icon: '#champion2', name: 'TopGapGaren', kda: '4/2/3', gold: '8.1k' },
+          { icon: '#champion3', name: 'JungleDiff', kda: '5/3/6', gold: '9.2k' },
+          { icon: '#champion1', name: 'You', kda: '8/2/5', gold: '10.3k' },
+          { icon: '#champion2', name: 'SupportKing', kda: '1/6/11', gold: '6.1k' }
+        ].forEach((row, index) => playerRow(top, row, 0.37 - index * 0.34, 'ally'));
+
+        const stats = panel('live-stats', -2.82, -1.0, 0.2, 1.38, 0.96, '0 16 0', colors.cyan);
+        text(stats, 'LIVE STATS', -0.53, 0.37, 0.05, { color: colors.cyan, width: 0.58 });
+        divider(stats, 0.23, 1.08);
+        statRow(stats, 'CS / min', '7.8   +1.2', 0.08, colors.green);
+        statRow(stats, 'Gold / min', '486   +62', -0.12, colors.green);
+        statRow(stats, 'Kill Participation', '56%', -0.32, colors.text);
+
+        const ability = panel('ability-tracker', -2.85, -1.84, 0.24, 1.35, 0.72, '0 16 0', colors.purple);
+        text(ability, 'ABILITY TRACKER', -0.5, 0.25, 0.05, { color: '#d8b4fe', width: 0.68 });
+        ['#ability1', '#ability2', '#ability3', '#ability4'].forEach((abilityIcon, index) => {
+          const x = -0.45 + index * 0.3;
+          plane(ability, {
+            width: 0.22,
+            height: 0.22,
+            position: `${x} 0 0.05`,
+            color: index === 3 ? '#152033' : colors.blue,
+            material: 'shader: flat; transparent: true; opacity: 0.74'
+          });
+          image(ability, abilityIcon, x, 0, 0.075, 0.2, 0.2);
+        });
+        text(ability, 'E ready in 6s', -0.47, -0.25, 0.05, { color: colors.cyan, width: 0.72 });
+      }
+
+      function makeRightStack() {
+        const objective = panel('objective', 2.72, 1.02, 0.16, 1.18, 0.52, '0 -16 0', colors.purple);
+        text(objective, 'NEXT OBJECTIVE', -0.44, 0.14, 0.05, { color: colors.text, width: 0.72 });
+        text(objective, 'Baron Nashor', -0.42, -0.05, 0.05, { color: colors.text, width: 0.56 });
+        text(objective, '1:24', 0.23, -0.05, 0.05, { color: colors.gold, width: 0.32 });
+        image(objective, '#rank1', 0.46, -0.02, 0.06, 0.26, 0.26);
+        const objectiveHit = plane(objective, {
+          width: 1.18,
+          height: 0.52,
+          position: '0 0 0.09',
+          color: '#ffffff',
+          material: 'shader: flat; transparent: true; opacity: 0'
+        });
+        objectiveHit.classList.add('clickable');
+        objectiveHit.addEventListener('mouseenter', () => objective.setAttribute('scale', '1.04 1.04 1.04'));
+        objectiveHit.addEventListener('mouseleave', () => objective.setAttribute('scale', '1 1 1'));
+        objectiveHit.addEventListener('click', showObjectiveModal);
+
+        const enemy = panel('enemy-insights', 2.7, 0.2, 0.2, 1.42, 1.48, '0 -16 0', colors.red);
+        text(enemy, 'ENEMY INSIGHTS', -0.56, 0.6, 0.05, { color: '#ff8a94', width: 0.78 });
+        divider(enemy, 0.47, 1.12);
+        [
+          { icon: '#champion3', name: 'Enemy Top', kda: '2/5/1', gold: '234k' },
+          { icon: '#champion2', name: 'Enemy Jungle', kda: '4/4/5', gold: '345k' },
+          { icon: '#champion1', name: 'Enemy Mid', kda: '6/3/2', gold: '456k' },
+          { icon: '#champion3', name: 'Enemy ADC', kda: '3/5/4', gold: '234k' }
+        ].forEach((row, index) => playerRow(enemy, row, 0.28 - index * 0.31, 'enemy'));
+
+        const matchup = panel('matchup', 2.77, -0.92, 0.22, 1.34, 0.82, '0 -16 0', colors.purple);
+        text(matchup, 'MATCHUP INSIGHT', -0.52, 0.29, 0.05, { color: colors.cyan, width: 0.8 });
+        image(matchup, '#champion2', -0.34, 0, 0.06, 0.28, 0.28);
+        text(matchup, 'VS', 0, 0, 0.06, { align: 'center', color: colors.muted, width: 0.68 });
+        image(matchup, '#champion3', 0.34, 0, 0.06, 0.28, 0.28);
+        text(matchup, 'YASUO', -0.34, -0.22, 0.06, { align: 'center', color: colors.text, width: 0.34 });
+        text(matchup, 'ZED', 0.34, -0.22, 0.06, { align: 'center', color: colors.red, width: 0.26 });
+        text(matchup, '62% win rate', 0, -0.35, 0.06, { align: 'center', color: colors.green, width: 0.62 });
+
+        const feed = panel('community', 2.82, -1.68, 0.26, 1.34, 0.68, '0 -16 0', colors.cyan);
+        text(feed, 'COMMUNITY FEED', -0.51, 0.24, 0.05, { color: colors.cyan, width: 0.8 });
+        text(feed, '@LoLStrategy', -0.5, 0.06, 0.05, { color: colors.blue, width: 0.54 });
+        text(feed, 'Zed is missing in river!', -0.5, -0.08, 0.05, { color: colors.text, width: 0.9 });
+        text(feed, '@JungleMains', -0.5, -0.26, 0.05, { color: colors.blue, width: 0.58 });
+      }
+
+      function makeLowerHud() {
+        const news = panel('news', 0, -1.78, 0.2, 2.65, 0.36, '0 0 0', colors.cyan);
+        text(news, 'LOL ESPORTS NEWS', -1.18, 0.08, 0.05, { color: colors.cyan, width: 0.86, readableWidth: 0.9, wrapCount: 18 });
+        text(news, 'MSI 2024: T1 advances after a 3-1 win over GEN.G', -1.18, -0.08, 0.05, { color: colors.text, width: 1.95, readableWidth: 2.0, wrapCount: 48 });
+        text(news, '2h ago', 1.1, -0.08, 0.05, { align: 'right', color: colors.muted, width: 0.34, readableWidth: 0.34, wrapCount: 8 });
+
+        const minimap = panel('minimap', 2.18, -2.18, 0.46, 1.25, 0.94, '0 -13 0', colors.gold);
+        image(minimap, '#minimap', 0, 0.02, 0.05, 1.04, 0.82);
+        plane(minimap, {
+          width: 0.42,
+          height: 0.26,
+          position: '0.12 -0.05 0.08',
+          color: colors.cyan,
+          material: 'shader: flat; transparent: true; opacity: 0.22'
+        });
+      }
+
+      function makeBrand() {
+        const brand = entity({ position: '-3.25 1.5 0.05', rotation: '0 12 0' });
+        image(brand, '#logo', 0, 0.02, 0.05, 0.5, 0.5);
+        plane(brand, {
+          width: 0.08,
+          height: 0.08,
+          position: '0.02 -0.3 0.05',
+          color: colors.green,
+          material: 'shader: flat; transparent: true; opacity: 0.95'
+        });
+        text(brand, 'AR MODE', 0.18, -0.3, 0.05, { color: colors.text, width: 0.55 });
+      }
+
+      function makeModal() {
+        const modal = entity({ id: 'modal', visible: false, position: '0 0.05 1.05' });
+        plane(modal, {
+          width: 7.6,
+          height: 4.8,
+          color: '#020614',
+          position: '0 0 -0.08',
+          material: 'shader: flat; transparent: true; opacity: 0.56'
+        });
+        const card = panel('modal-card', 0, 0, 0, 1.9, 1.52, '0 0 0', colors.cyan);
+        modal.appendChild(card);
+        text(card, 'Item Details', -0.72, 0.56, 0.06, { color: colors.text, width: 0.42, readableWidth: 1.5, wrapCount: 14 });
+        plane(card, {
+          width: 0.18,
+          height: 0.18,
+          position: '0.74 0.56 0.07',
+          color: '#1f2b42',
+          material: 'shader: flat; transparent: true; opacity: 0.96'
+        });
+        text(card, 'X', 0.74, 0.56, 0.09, { align: 'center', color: colors.text, width: 0.16, readableWidth: 1.16, wrapCount: 2 });
+        image(card, '#item1', -0.48, 0.17, 0.06, 0.46, 0.46, {});
+        text(card, 'Item Name', 0.05, 0.27, 0.06, { id: 'modal-title', color: colors.text, width: 0.52, readableWidth: 1.72, wrapCount: 14 });
+        text(card, '3200g', 0.05, 0.08, 0.06, { id: 'modal-cost', color: colors.gold, width: 0.42, readableWidth: 1.22, wrapCount: 10 });
+        plane(card, {
+          width: 1.48,
+          height: 0.46,
+          position: '0 -0.32 0.05',
+          color: '#030b1d',
+          material: 'shader: flat; transparent: true; opacity: 0.78'
+        });
+        text(card, 'STATS\n+ Attack Damage\n+ Attack Speed\n+ Critical Strike', -0.62, -0.32, 0.07, { id: 'modal-stats', color: colors.text, width: 0.76, readableWidth: 0.9, wrapCount: 20 });
+        plane(card, {
+          width: 1.48,
+          height: 0.18,
+          position: '0 -0.64 0.05',
+          color: '#05263b',
+          material: 'shader: flat; transparent: true; opacity: 0.82'
+        });
+        text(card, 'Best when ahead in lane.', -0.62, -0.64, 0.07, { id: 'modal-note', color: colors.cyan, width: 0.72, readableWidth: 0.96, wrapCount: 24 });
+
+        const closeHit = plane(card, {
+          width: 0.24,
+          height: 0.24,
+          position: '0.74 0.56 0.11',
+          color: '#ffffff',
+          material: 'shader: flat; transparent: true; opacity: 0'
+        });
+        closeHit.classList.add('clickable');
+        closeHit.addEventListener('click', hideModal);
+        return modal;
+      }
+
+      function makeObjectiveModal() {
+        const modal = entity({ id: 'objective-modal', visible: false, position: '0 0.05 1.08' });
+        plane(modal, {
+          width: 7.6,
+          height: 4.8,
+          color: '#020614',
+          position: '0 0 -0.08',
+          material: 'shader: flat; transparent: true; opacity: 0.55'
+        });
+        const card = panel('objective-card', 0, 0, 0, 1.7, 1.0, '0 0 0', colors.purple);
+        modal.appendChild(card);
+        text(card, 'Objective Timers', -0.65, 0.34, 0.06, { color: colors.text, width: 0.5, readableWidth: 1.02, wrapCount: 16 });
+        plane(card, {
+          width: 0.18,
+          height: 0.18,
+          position: '0.65 0.34 0.07',
+          color: '#1f2b42',
+          material: 'shader: flat; transparent: true; opacity: 0.96'
+        });
+        text(card, 'X', 0.65, 0.34, 0.09, { align: 'center', color: colors.text, width: 0.16, readableWidth: 1.16, wrapCount: 2 });
+        [
+          ['Baron Nashor', '5:23', colors.purple],
+          ['Dragon', '0:48', colors.cyan],
+          ['Herald', 'Slain', colors.line]
+        ].forEach((row, index) => {
+          const y = 0.08 - index * 0.25;
+          plane(card, {
+            width: 1.35,
+            height: 0.18,
+            position: `0 ${y} 0.05`,
+            color: row[2],
+            material: 'shader: flat; transparent: true; opacity: 0.42'
+          });
+          text(card, row[0], -0.58, y, 0.07, { color: colors.text, width: 0.64 });
+          text(card, row[1], 0.58, y, 0.07, { align: 'right', color: row[2] === colors.line ? colors.muted : colors.text, width: 0.36 });
+        });
+        const closeHit = plane(card, {
+          width: 0.24,
+          height: 0.24,
+          position: '0.65 0.34 0.09',
+          color: '#ffffff',
+          material: 'shader: flat; transparent: true; opacity: 0'
+        });
+        closeHit.classList.add('clickable');
+        closeHit.addEventListener('click', hideObjectiveModal);
+      }
+
+      function makeProfileModal() {
+        const modal = entity({ id: 'profile-modal', visible: false, position: '0 0.02 1.48' });
+        plane(modal, {
+          width: 7.6,
+          height: 4.8,
+          color: '#020614',
+          position: '0 0 -0.08',
+          material: 'shader: flat; transparent: true; opacity: 0.62'
+        });
+
+        const card = panel('profile-card', 0, 0, 0, 3.55, 2.32, '0 0 0', colors.cyan);
+        modal.appendChild(card);
+
+        plane(card, {
+          width: 3.42,
+          height: 0.58,
+          position: '0 0.79 0.04',
+          color: '#0a1d37',
+          material: 'shader: flat; transparent: true; opacity: 0.9'
+        });
+        image(card, '#champion1', -1.45, 0.79, 0.07, 0.38, 0.38);
+        plane(card, {
+          width: 0.27,
+          height: 0.12,
+          position: '-1.45 1.04 0.08',
+          color: colors.gold,
+          material: 'shader: flat; transparent: true; opacity: 0.98'
+        });
+        text(card, '142', -1.45, 1.04, 0.1, { id: 'profile-level', align: 'center', color: '#071126', readableWidth: 1.5, wrapCount: 4 });
+        text(card, 'GamarPlayer #EUNE', -1.16, 0.9, 0.08, { id: 'profile-name', color: colors.text, readableWidth: 2.2, wrapCount: 18 });
+        text(card, 'Ranked KDA 8.2 / 2.5 / 7.1', -1.16, 0.68, 0.08, { id: 'profile-subtitle', color: colors.muted, readableWidth: 1.8, wrapCount: 28 });
+
+        plane(card, {
+          width: 0.2,
+          height: 0.2,
+          position: '1.55 0.98 0.08',
+          color: '#1f2b42',
+          material: 'shader: flat; transparent: true; opacity: 0.96'
+        });
+        text(card, 'X', 1.55, 0.98, 0.1, { align: 'center', color: colors.text, readableWidth: 1.16, wrapCount: 2 });
+        const closeHit = plane(card, {
+          width: 0.28,
+          height: 0.28,
+          position: '1.55 0.98 0.12',
+          color: '#ffffff',
+          material: 'shader: flat; transparent: true; opacity: 0'
+        });
+        closeHit.classList.add('clickable');
+        closeHit.addEventListener('click', hideProfileModal);
+
+        ['Overview', 'Champion Stats', 'Live Game'].forEach((label, index) => {
+          const x = -1.35 + index * 0.72;
+          text(card, label, x, 0.38, 0.07, { color: index === 0 ? colors.cyan : colors.text, readableWidth: 1.0, wrapCount: 16 });
+          if (index === 0) {
+            plane(card, { width: 0.42, height: 0.02, position: `${x + 0.12} 0.27 0.08`, color: colors.cyan });
+          }
+        });
+
+        const solo = entity({ position: '-1.05 -0.1 0.04' }, card);
+        plane(solo, { width: 1.25, height: 0.58, color: '#12152f', material: 'shader: flat; transparent: true; opacity: 0.92' });
+        text(solo, 'Ranked Solo', -0.5, 0.18, 0.04, { color: colors.text, readableWidth: 1.45, wrapCount: 16 });
+        image(solo, '#rank1', -0.42, -0.08, 0.04, 0.22, 0.22);
+        text(solo, 'Gold I', -0.16, -0.02, 0.04, { color: colors.gold, readableWidth: 1.25, wrapCount: 10 });
+        text(solo, '76 LP', -0.16, -0.18, 0.04, { color: colors.muted, readableWidth: 1.05, wrapCount: 10 });
+
+        const flex = entity({ position: '-1.05 -0.78 0.04' }, card);
+        plane(flex, { width: 1.25, height: 0.58, color: '#12152f', material: 'shader: flat; transparent: true; opacity: 0.92' });
+        text(flex, 'Ranked Flex', -0.5, 0.18, 0.04, { color: colors.text, readableWidth: 1.45, wrapCount: 16 });
+        image(flex, '#rank1', -0.42, -0.08, 0.04, 0.22, 0.22);
+        text(flex, 'Gold I', -0.16, -0.02, 0.04, { color: colors.gold, readableWidth: 1.25, wrapCount: 10 });
+        text(flex, '53 LP', -0.16, -0.18, 0.04, { color: colors.muted, readableWidth: 1.05, wrapCount: 10 });
+
+        const champs = entity({ position: '-1.05 -1.42 0.04' }, card);
+        plane(champs, { width: 1.25, height: 0.55, color: '#10142d', material: 'shader: flat; transparent: true; opacity: 0.92' });
+        text(champs, 'Champion Stats', -0.5, 0.18, 0.04, { color: colors.text, readableWidth: 1.55, wrapCount: 18 });
+        [
+          ['#champion1', 'Senna', '3.28 KDA', '59%'],
+          ['#champion2', 'Yasuo', '2.23 KDA', '55%']
+        ].forEach((row, index) => {
+          const y = 0.02 - index * 0.2;
+          image(champs, row[0], -0.48, y, 0.05, 0.15, 0.15);
+          text(champs, row[1], -0.34, y + 0.04, 0.05, { color: colors.text, readableWidth: 0.95, wrapCount: 10 });
+          text(champs, row[2], 0.1, y + 0.04, 0.05, { color: colors.cyan, readableWidth: 1.0, wrapCount: 10 });
+          text(champs, row[3], 0.5, y + 0.04, 0.05, { align: 'right', color: colors.text, readableWidth: 0.7, wrapCount: 6 });
+        });
+
+        const history = entity({ position: '0.78 -0.55 0.04' }, card);
+        plane(history, { width: 1.92, height: 1.72, color: '#10142d', material: 'shader: flat; transparent: true; opacity: 0.92' });
+        text(history, 'Match History', -0.82, 0.73, 0.05, { color: colors.text, readableWidth: 1.65, wrapCount: 18 });
+        text(history, 'All Matches', 0.45, 0.73, 0.05, { color: colors.text, readableWidth: 1.15, wrapCount: 14 });
+        [
+          ['LOSS', '-19 LP', '2 / 6 / 19', '#champion1', colors.red],
+          ['WIN', '+21 LP', '6 / 13 / 18', '#champion3', colors.blue],
+          ['WIN', '+21 LP', '13 / 13 / 31', '#champion1', colors.blue],
+          ['WIN', '+20 LP', '9 / 3 / 25', '#champion2', colors.blue]
+        ].forEach((row, index) => {
+          const y = 0.43 - index * 0.34;
+          plane(history, {
+            width: 1.72,
+            height: 0.26,
+            position: `0 ${y} 0.05`,
+            color: row[4],
+            material: 'shader: flat; transparent: true; opacity: 0.34'
+          });
+          text(history, row[0], -0.78, y + 0.04, 0.07, { color: row[4] === colors.red ? '#ffb4bd' : '#dbeafe', readableWidth: 1.0, wrapCount: 6 });
+          text(history, row[1], -0.78, y - 0.07, 0.07, { color: row[4] === colors.red ? colors.red : colors.cyan, readableWidth: 1.05, wrapCount: 8 });
+          image(history, row[3], -0.28, y, 0.07, 0.18, 0.18);
+          image(history, '#item1', 0.0, y, 0.07, 0.14, 0.14);
+          image(history, '#item2', 0.18, y, 0.07, 0.14, 0.14);
+          image(history, '#item3', 0.36, y, 0.07, 0.14, 0.14);
+          text(history, row[2], 0.76, y + 0.02, 0.07, { align: 'right', color: colors.text, readableWidth: 1.45, wrapCount: 12 });
+        });
+      }
+
+      function showItemModal(item) {
+        const modal = document.querySelector('#modal');
+        modal.querySelector('a-image').setAttribute('src', item.icon);
+        modal.querySelector('#modal-title').setAttribute('value', item.title);
+        modal.querySelector('#modal-cost').setAttribute('value', item.cost);
+        modal.querySelector('#modal-stats').setAttribute('value', `STATS\n${item.stats}`);
+        modal.querySelector('#modal-note').setAttribute('value', item.note);
+        document.querySelector('#objective-modal').setAttribute('visible', false);
+        document.querySelector('#profile-modal').setAttribute('visible', false);
+        modal.setAttribute('visible', true);
+      }
+
+      function hideModal() {
+        document.querySelector('#modal').setAttribute('visible', false);
+      }
+
+      function showObjectiveModal() {
+        document.querySelector('#modal').setAttribute('visible', false);
+        document.querySelector('#profile-modal').setAttribute('visible', false);
+        document.querySelector('#objective-modal').setAttribute('visible', true);
+      }
+
+      function hideObjectiveModal() {
+        document.querySelector('#objective-modal').setAttribute('visible', false);
+      }
+
+      function showProfileModal(data, team) {
+        const modal = document.querySelector('#profile-modal');
+        modal.querySelector('a-image').setAttribute('src', data.icon);
+        modal.querySelector('#profile-name').setAttribute('value', `${data.name} #EUNE`);
+        modal.querySelector('#profile-subtitle').setAttribute('value', `${team === 'ally' ? 'Ally' : 'Enemy'} profile | KDA ${data.kda} | Gold ${data.gold}`);
+        document.querySelector('#modal').setAttribute('visible', false);
+        document.querySelector('#objective-modal').setAttribute('visible', false);
+        modal.setAttribute('visible', true);
+      }
+
+      function hideProfileModal() {
+        document.querySelector('#profile-modal').setAttribute('visible', false);
+      }
+
+      function addDepthLines() {
+        for (let i = -5; i <= 5; i += 1) {
+          plane(hud, {
+            width: 0.01,
+            height: 3.2,
+            position: `${i * 0.7} -1.1 -0.42`,
+            rotation: '-90 0 0',
+            color: '#162033',
+            material: 'shader: flat; transparent: true; opacity: 0.22'
+          });
+        }
+        for (let i = 0; i < 5; i += 1) {
+          plane(hud, {
+            width: 7.4,
+            height: 0.01,
+            position: `0 ${-2.2 + i * 0.58} -0.42`,
+            rotation: '-90 0 0',
+            color: '#162033',
+            material: 'shader: flat; transparent: true; opacity: 0.18'
+          });
+        }
+      }
+
+      makeBrand();
+      makeCentralScreen();
+      makeLeftStack();
+      makeRightStack();
+      makeLowerHud();
+      makeModal();
+      makeObjectiveModal();
+      makeProfileModal();
+
+      hud.setAttribute('scale', '1.12 1.12 1.12');
+      hud.setAttribute('animation__enter', 'property: position; from: 0 -0.08 -0.35; to: 0 0 0; dur: 1000; easing: easeOutCubic');
+      hud.setAttribute('animation__float', 'property: rotation; from: 0 -1 0; to: 0 1 0; dir: alternate; dur: 7000; easing: easeInOutSine; loop: true');
+    </script>
+  </a-scene>
+</body>
+</html>
