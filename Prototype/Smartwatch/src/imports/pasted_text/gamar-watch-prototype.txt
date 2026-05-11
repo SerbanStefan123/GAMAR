@@ -1,0 +1,154 @@
+Create a high-fidelity clickable smartwatch app prototype for a League of Legends companion app called “Gamar Watch”.
+
+This smartwatch prototype should visually match the existing mobile app called “Gamar”, using the same dark futuristic esports style:
+- dark navy / black background
+- neon cyan, yellow, and purple accents
+- glassmorphism cards
+- clean gaming HUD-inspired panels
+- compact readable typography
+- a polished teenage gamer aesthetic
+- League of Legends inspired look and feel
+
+Important: this is only a clickable mock prototype, not a fully functional app.
+
+Use a realistic smartwatch frame, similar to a modern Apple Watch / square smartwatch. Design each screen for approximately 220x260 px or a similar smartwatch size. Use rounded corners and realistic screen spacing.
+
+Use placeholder asset names exactly like this:
+- champion1.png
+- champion2.png
+- champion3.png
+- item1.png
+- item2.png
+- item3.png
+- rank1.png
+
+The smartwatch prototype should feel like a real wearable UI:
+- users must be able to swipe horizontally between main screens, like a real smartwatch carousel
+- add page indicators (small dots) at the bottom
+- support tap/click interactions on cards and controls
+- use smooth transitions between screens
+- prototype should simulate touchscreen interaction as much as possible
+
+Create the following main smartwatch screens:
+
+1. Profile Card Screen
+This should be the first screen and should follow the first sketch card.
+Include:
+- small avatar using champion1.png
+- username: “GamarPlayer”
+- small level badge: “142”
+- main role text: “Main role: ADC / SUP”
+- compact clean layout with avatar on top and text below
+- page indicator at the bottom showing this is screen 1 of the carousel
+- swipe left should go to Ranked screen
+- swipe right can loop or bounce naturally
+
+2. Ranked Screen
+This should follow the second sketch card.
+Include:
+- title: “Ranked”
+- two side-by-side sections:
+  - Flex rank
+  - Solo/Duo rank
+- use rank1.png for both rank icons
+- Flex: “Gold I”
+- Solo/Duo: “Bronze IV”
+- LP values:
+  - Flex: “65 LP”
+  - Solo/Duo: “0 LP”
+- page indicator at the bottom showing this is screen 2
+- swipe left goes to Match History
+- swipe right goes back to Profile
+
+3. Match History Screen
+This should follow the third sketch card.
+Include:
+- title: “Match History”
+- show 2 recent matches in compact watch layout
+- match 1:
+  - result: WIN
+  - queue: Solo/Duo
+  - LP: +20 LP
+  - KDA: 12/4/8
+- match 2:
+  - result: LOSS
+  - queue: Flex
+  - LP: -14 LP
+  - KDA: 0/10/0
+- small colored result indicators:
+  - cyan/green-ish for WIN
+  - red for LOSS
+- page indicator at the bottom showing this is screen 3
+- swipe right goes to Ranked
+- tapping a match opens a detail screen
+
+4. Match Detail Screen
+This screen opens when a user taps a match on Match History.
+Include:
+- result at top: “Victory” or “Defeat”
+- champion icon using champion1.png
+- KDA
+- CS
+- LP gained/lost
+- small row of current build items using item1.png, item2.png, item3.png
+- a small “Back” button to return to Match History
+
+5. Quick Live Status Screen
+Add one additional smartwatch screen to make the experience feel connected to the phone app.
+This should show glanceable in-game info in a compact watch format.
+Include:
+- title: “Live Game”
+- game time: 14:06
+- score: 10 / 8
+- gold diff: +1.2k
+- CS/min: 7.4
+- recommended next item using item1.png
+- short text: “700g needed”
+- a small live alert card:
+  - “Enemy ADC bought”
+  - show item2.png next to the text
+- page indicator at bottom showing this is screen 4
+- swipe right goes back to Match History
+
+6. Notification Pop-up / Alert Overlay
+Create a small smartwatch alert overlay modal that can appear above the current screen.
+Include:
+- item icon using item2.png
+- title: “Item Alert”
+- message: “Enemy Mid bought Luden’s Tempest”
+- timestamp: “14:02”
+- two small buttons:
+  - “Dismiss”
+  - “View”
+- tapping Dismiss closes the modal
+- tapping View opens the Quick Live Status screen
+
+Prototype interactions:
+- Main screens should be horizontally swipeable like a real smartwatch carousel
+- Profile → Ranked → Match History → Live Game
+- Tapping a match on Match History opens Match Detail
+- Tapping the alert or “View” opens Live Game
+- Tapping “Back” returns to previous screen
+- Use smooth Smart Animate transitions if possible
+- Add bottom page dots for all main carousel screens
+- Make the prototype feel like it is controlled through a touchscreen smartwatch interface
+
+Visual design requirements:
+- Use the same design system as the mobile app
+- Keep the style consistent with Gamar mobile:
+  - dark gradients
+  - neon cyan highlights
+  - yellow accents for important stats
+  - purple accents for secondary sections
+- Keep layouts minimal and glanceable, because it is a smartwatch
+- Prioritize readability and compact information density
+- Use card-based design
+- Use real-looking smartwatch spacing and proportions
+
+Important:
+- Make it high-fidelity
+- Make it clickable
+- Make swipe gestures between main screens feel like a real smartwatch
+- Keep the UI consistent with the phone app
+- Use hardcoded mock data only
+- Use placeholder asset file names exactly as listed
