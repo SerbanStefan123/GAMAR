@@ -1,0 +1,166 @@
+[
+  {
+    "id": "node-1778497776344",
+    "type": "node",
+    "screen": "Main Screen",
+    "actions": [
+      {
+        "id": "action-1778497776344",
+        "label": "Profile",
+        "connections": [
+          {
+            "targetId": "node-1778497880849",
+            "fromPosition": "right",
+            "toPosition": "left"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497791697",
+        "label": "Live Match",
+        "connections": [
+          {
+            "targetId": "node-1778498001117",
+            "fromPosition": "right",
+            "toPosition": "left"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497824963",
+        "label": "Build Recommendation",
+        "connections": [
+          {
+            "targetId": "node-1778498085460",
+            "fromPosition": "left",
+            "toPosition": "right"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497848410",
+        "label": "Live Charts",
+        "connections": [
+          {
+            "targetId": "node-1778498140166",
+            "fromPosition": "left",
+            "toPosition": "right"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497954154",
+        "label": "Item Alert",
+        "connections": []
+      }
+    ],
+    "x": 650,
+    "y": 123
+  },
+  {
+    "id": "node-1778497880849",
+    "type": "node",
+    "screen": "Profile",
+    "actions": [
+      {
+        "id": "action-1778497880849",
+        "label": "Search Profile",
+        "connections": []
+      },
+      {
+        "id": "action-1778497906929",
+        "label": "Player Stats / Rank",
+        "connections": []
+      },
+      {
+        "id": "action-1778497929133",
+        "label": "Match History",
+        "connections": []
+      }
+    ],
+    "x": 1124,
+    "y": 39
+  },
+  {
+    "id": "node-1778498001117",
+    "type": "node",
+    "screen": "Live",
+    "actions": [
+      {
+        "id": "action-1778498001117",
+        "label": "Team Comparison",
+        "connections": []
+      },
+      {
+        "id": "action-1778498019786",
+        "label": "Recomanded Next Item",
+        "connections": []
+      },
+      {
+        "id": "action-1778498032045",
+        "label": "Objective Timers",
+        "connections": []
+      },
+      {
+        "id": "action-1778498037870",
+        "label": "Live Alerts",
+        "connections": []
+      }
+    ],
+    "x": 1131,
+    "y": 425
+  },
+  {
+    "id": "node-1778498085460",
+    "type": "node",
+    "screen": "Builds",
+    "actions": [
+      {
+        "id": "action-1778498085460",
+        "label": "Recomanded Build",
+        "connections": []
+      },
+      {
+        "id": "action-1778498100523",
+        "label": "Other Situational Builds",
+        "connections": []
+      }
+    ],
+    "x": 130,
+    "y": 102
+  },
+  {
+    "id": "node-1778498140166",
+    "type": "node",
+    "screen": "Charts",
+    "actions": [
+      {
+        "id": "action-1778498140166",
+        "label": "Performance Insights",
+        "connections": []
+      },
+      {
+        "id": "action-1778498156136",
+        "label": "CS Over Time",
+        "connections": []
+      },
+      {
+        "id": "action-1778498159262",
+        "label": "Gold Over Time",
+        "connections": []
+      },
+      {
+        "id": "action-1778498171356",
+        "label": "LP Gained",
+        "connections": []
+      },
+      {
+        "id": "action-1778498175565",
+        "label": "Damage Dealt",
+        "connections": []
+      }
+    ],
+    "x": 131,
+    "y": 472
+  }
+]

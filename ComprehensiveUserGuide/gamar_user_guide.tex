@@ -1,0 +1,569 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}
+  {1em}
+  {}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Gamar}
+\rhead{User Guide}
+\cfoot{\thepage}
+
+\title{\textbf{Gamar - User Guide pentru toate prototipurile}}
+\author{Student Project}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introducere}
+
+Gamar este un prototip multi-device pentru jucatorii de League of Legends. Ideea principala a aplicatiei este sa ajute jucatorul sa vada informatii importante despre contul lui, despre meciurile recente, despre meciul live si despre performanta de dupa joc.
+
+Proiectul este impartit in trei prototipuri:
+
+\begin{itemize}
+    \item aplicatie pentru telefon;
+    \item aplicatie pentru smartwatch;
+    \item experienta AR/MR pentru headset.
+\end{itemize}
+
+Toate cele trei prototipuri fac parte din aceeasi idee de produs. Telefonul este interfata principala, smartwatch-ul este folosit pentru informatii rapide, iar headset-ul AR/MR afiseaza informatii in jurul utilizatorului intr-un spatiu 3D.
+
+Acest proiect este doar un prototip high-fidelity. Datele din aplicatie sunt hardcodate si nu sunt conectate la Riot API sau la un meci real de League of Legends.
+
+\section{Prezentarea generala a prototipurilor}
+
+\subsection{Prototipul pentru telefon}
+
+Aplicatia de telefon este partea principala a proiectului Gamar. Aici utilizatorul poate vedea profilul sau, rank-ul, winrate-ul, match history-ul, recomandarile de build, informatii live din meci si statistici post-game.
+
+Telefonul are mai multe pagini principale:
+
+\begin{itemize}
+    \item Profile;
+    \item Live;
+    \item Build;
+    \item Charts.
+\end{itemize}
+
+Navigarea se face prin bara de jos, unde utilizatorul poate apasa pe fiecare tab.
+
+\subsection{Prototipul pentru smartwatch}
+
+Smartwatch-ul este gandit ca o versiune mai mica si mai rapida a aplicatiei. Pe ceas, utilizatorul nu are nevoie de toate detaliile de pe telefon, ci doar de informatii scurte si usor de citit.
+
+Prototipul de smartwatch foloseste swipe intre ecrane, la fel ca un smartwatch real. Utilizatorul poate trece prin ecrane pentru profil, rank, match history si live game.
+
+\subsection{Prototipul pentru AR/MR headset}
+
+Prototipul AR/MR este facut in A-Frame si arata cum ar putea fi extinsa experienta Gamar intr-un spatiu 3D. In loc ca informatiile sa fie doar pe telefon sau ceas, ele apar ca panouri plutitoare in jurul utilizatorului.
+
+Acest prototip are rolul de a demonstra cum ar putea arata o interfata spatiala pentru un companion app de League of Legends.
+
+\section{Ghid de utilizare pentru aplicatia de telefon}
+
+\subsection{Pornirea aplicatiei}
+
+Cand utilizatorul deschide aplicatia de telefon, apare ecranul de start al aplicatiei Gamar. Pe acest ecran se vede logo-ul aplicatiei si mesajul:
+
+\begin{center}
+    \textbf{``Your live League of Legends companion''}
+\end{center}
+
+Utilizatorul poate apasa pe butonul \textbf{Open Dashboard} pentru a intra in aplicatie.
+
+Exista si un buton numit \textbf{Connect Riot Account}, care arata ideea ca aplicatia s-ar putea conecta la un cont Riot in viitor. In prototip, acest buton este doar de prezentare si nu face o conexiune reala.
+
+\subsection{Pagina Profile}
+
+Pagina \textbf{Profile} este pagina principala a utilizatorului. Aici sunt afisate informatii despre contul sau de League of Legends.
+
+Pe aceasta pagina se pot vedea:
+
+\begin{itemize}
+    \item avatarul jucatorului;
+    \item username-ul: \textbf{GamarPlayer};
+    \item nivelul contului;
+    \item rolurile principale: ADC si Support;
+    \item membrii din party;
+    \item rank-ul de Solo/Duo;
+    \item rank-ul de Flex;
+    \item winrate-ul;
+    \item rezultatele din ultimele 30 de meciuri;
+    \item build-ul curent;
+    \item match history.
+\end{itemize}
+
+Utilizatorul poate apasa pe membrii din party, cum ar fi \textbf{User 1}, \textbf{User 2} sau \textbf{User 3}, pentru a deschide pagina de detalii a unui alt jucator.
+
+In sectiunea \textbf{Match History}, fiecare card reprezinta un meci recent. Cardul arata daca meciul a fost castigat sau pierdut, tipul meciului, LP-ul castigat sau pierdut, KDA-ul si CS-ul. Daca utilizatorul apasa pe un meci, este dus la pagina de statistici post-game.
+
+\subsection{Pagina Live}
+
+Pagina \textbf{Live} este una dintre cele mai importante parti ale aplicatiei. Aceasta simuleaza un dashboard live pentru un meci de League of Legends.
+
+In partea de sus, utilizatorul poate vedea informatii generale despre meci:
+
+\begin{itemize}
+    \item timpul meciului;
+    \item scorul echipelor;
+    \item diferenta de gold;
+    \item FPS;
+    \item ping.
+\end{itemize}
+
+Mai jos exista sectiunea \textbf{Team Comparison}, unde sunt afisati jucatorii aliati si jucatorii inamici. Pentru fiecare jucator se pot vedea informatii precum:
+
+\begin{itemize}
+    \item campionul jucat;
+    \item numele jucatorului;
+    \item KDA;
+    \item CS;
+    \item itemele cumparate.
+\end{itemize}
+
+Aceasta sectiune ajuta utilizatorul sa compare rapid cele doua echipe si sa inteleaga cine este ahead sau behind.
+
+Pagina mai contine si sectiunea \textbf{Recommended Next Items}. Aici sunt afisate trei iteme recomandate pentru build-ul urmator. Sub fiecare item se vede si cati bani mai sunt necesari pentru cumpararea lui.
+
+Exista si un card pentru \textbf{CS per minute}, unde utilizatorul poate vedea:
+
+\begin{itemize}
+    \item CS/min curent;
+    \item CS/min tinta;
+    \item o recomandare scurta despre farming.
+\end{itemize}
+
+De exemplu, aplicatia poate spune ca jucatorul este putin in urma si ar trebui sa se concentreze pe urmatorul wave.
+
+Sectiunea \textbf{Live Alerts} afiseaza notificari importante din meci, cum ar fi:
+
+\begin{itemize}
+    \item un inamic a cumparat un item;
+    \item un aliat a terminat un item;
+    \item dragonul apare in curand.
+\end{itemize}
+
+Utilizatorul poate apasa pe butonul \textbf{Trigger Item Notification}, care simuleaza o notificare live in care un inamic cumpara un item.
+
+Butonul \textbf{Show Objective Timer} deschide un popup cu timer-ele pentru obiective precum Baron, Dragon si Herald.
+
+\subsection{Pagina Build}
+
+Pagina \textbf{Build} este folosita pentru recomandarile de iteme.
+
+Pe aceasta pagina, utilizatorul poate vedea:
+
+\begin{itemize}
+    \item campionul selectat;
+    \item rolul jucat;
+    \item matchup-ul;
+    \item build path-ul recomandat;
+    \item build agresiv;
+    \item build safe;
+    \item build anti-tank.
+\end{itemize}
+
+Fiecare build are iteme diferite si un cost total in gold.
+
+Utilizatorul poate apasa pe un item pentru a deschide un popup cu detalii despre acel item. Popup-ul include:
+
+\begin{itemize}
+    \item imaginea itemului;
+    \item numele itemului;
+    \item costul;
+    \item statisticile itemului;
+    \item o recomandare scurta.
+\end{itemize}
+
+Aceasta pagina arata cum Gamar poate ajuta jucatorul sa ia decizii mai bune in timpul meciului, in functie de situatie.
+
+\subsection{Pagina Charts / Post-Game}
+
+Pagina \textbf{Charts} este folosita dupa terminarea meciului. Aceasta afiseaza statistici si analiza post-game.
+
+In partea de sus se vede rezultatul meciului, de exemplu \textbf{Victory}, impreuna cu:
+
+\begin{itemize}
+    \item durata meciului;
+    \item campionul jucat;
+    \item KDA;
+    \item CS;
+    \item LP castigat sau pierdut.
+\end{itemize}
+
+Sectiunea \textbf{Team Scoreboard} arata toti jucatorii din meci, atat aliati cat si inamici. Pentru fiecare jucator se pot vedea:
+
+\begin{itemize}
+    \item campionul;
+    \item numele;
+    \item KDA;
+    \item CS;
+    \item gold;
+    \item damage.
+\end{itemize}
+
+Pagina include si mai multe chart-uri:
+
+\begin{itemize}
+    \item damage dealt;
+    \item gold over time;
+    \item CS over time.
+\end{itemize}
+
+La final exista o sectiune numita \textbf{Performance Insights}, unde aplicatia ofera cateva observatii despre performanta jucatorului. Exemple:
+
+\begin{itemize}
+    \item laning phase bun;
+    \item damage mare;
+    \item obiective ratate;
+    \item vision score care trebuie imbunatatit.
+\end{itemize}
+
+Butonul \textbf{Back to Profile} duce utilizatorul inapoi la pagina de profil.
+
+\section{Ghid de utilizare pentru smartwatch}
+
+Smartwatch-ul este o versiune mai compacta a aplicatiei Gamar. Scopul lui este sa ofere informatii rapide, pe care jucatorul le poate verifica usor fara sa stea prea mult pe telefon.
+
+Design-ul smartwatch-ului foloseste acelasi stil ca aplicatia de telefon: fundal inchis, accente neon, carduri compacte si un aspect de gaming/esports.
+
+\subsection{Navigarea pe smartwatch}
+
+Navigarea pe smartwatch se face prin swipe, ca pe un ceas real.
+
+Utilizatorul poate:
+
+\begin{itemize}
+    \item sa dea swipe la stanga pentru urmatorul ecran;
+    \item sa dea swipe la dreapta pentru ecranul anterior;
+    \item sa apese pe anumite carduri pentru detalii;
+    \item sa foloseasca punctele de jos pentru a vedea pe ce pagina se afla.
+\end{itemize}
+
+Aceasta navigare face prototipul sa para mai apropiat de o aplicatie reala de smartwatch.
+
+\subsection{Ecranul Profile}
+
+Primul ecran de pe smartwatch este ecranul de profil.
+
+Aici sunt afisate informatii scurte despre utilizator:
+
+\begin{itemize}
+    \item avatarul;
+    \item username-ul;
+    \item nivelul;
+    \item rolul principal.
+\end{itemize}
+
+Acest ecran este simplu, deoarece pe smartwatch spatiul este limitat si informatiile trebuie sa fie usor de citit.
+
+\subsection{Ecranul Ranked}
+
+Ecranul \textbf{Ranked} afiseaza informatii despre rank-ul utilizatorului.
+
+Aici apar:
+
+\begin{itemize}
+    \item rank-ul de Flex;
+    \item rank-ul de Solo/Duo;
+    \item iconitele de rank;
+    \item LP-ul pentru fiecare queue.
+\end{itemize}
+
+Acest ecran permite utilizatorului sa verifice rapid progresul sau ranked direct de pe ceas.
+
+\subsection{Ecranul Match History}
+
+Ecranul \textbf{Match History} arata ultimele meciuri intr-un format compact.
+
+Pentru fiecare meci se pot vedea:
+
+\begin{itemize}
+    \item daca a fost win sau loss;
+    \item tipul queue-ului;
+    \item LP castigat sau pierdut;
+    \item KDA.
+\end{itemize}
+
+Utilizatorul poate apasa pe un meci pentru a deschide ecranul de detalii.
+
+\subsection{Ecranul Match Detail}
+
+Ecranul \textbf{Match Detail} ofera mai multe informatii despre un meci selectat.
+
+Acesta include:
+
+\begin{itemize}
+    \item rezultatul meciului;
+    \item campionul jucat;
+    \item KDA;
+    \item CS;
+    \item LP castigat sau pierdut;
+    \item itemele finale.
+\end{itemize}
+
+Exista si un buton de back, care intoarce utilizatorul la match history.
+
+\subsection{Ecranul Live Game}
+
+Ecranul \textbf{Live Game} de pe smartwatch afiseaza informatii live intr-un mod foarte compact.
+
+Utilizatorul poate vedea:
+
+\begin{itemize}
+    \item timpul meciului;
+    \item scorul echipelor;
+    \item diferenta de gold;
+    \item CS/min;
+    \item urmatorul item recomandat;
+    \item gold-ul necesar pentru acel item;
+    \item o notificare live scurta.
+\end{itemize}
+
+Acest ecran este util pentru ca jucatorul poate verifica rapid informatii importante fara sa deschida aplicatia mare de pe telefon.
+
+\subsection{Notificari pe smartwatch}
+
+Smartwatch-ul are si un popup de notificare.
+
+Un exemplu de notificare este:
+
+\begin{center}
+    \textbf{Enemy Mid bought Luden's Tempest}
+\end{center}
+
+Notificarea contine:
+
+\begin{itemize}
+    \item iconita itemului;
+    \item titlul notificarii;
+    \item mesajul;
+    \item timpul;
+    \item butonul Dismiss;
+    \item butonul View.
+\end{itemize}
+
+Daca utilizatorul apasa \textbf{Dismiss}, notificarea se inchide. Daca apasa \textbf{View}, este dus la ecranul Live Game.
+
+\section{Ghid de utilizare pentru AR/MR headset}
+
+Prototipul AR/MR este partea spatiala a proiectului Gamar. Acesta este realizat in A-Frame si ruleaza in browser.
+
+Scopul lui este sa arate cum ar putea fi afisate informatiile din League of Legends intr-un spatiu 3D, in jurul utilizatorului.
+
+\subsection{Pornirea prototipului AR/MR}
+
+Prototipul AR/MR se deschide intr-o scena 3D in browser.
+
+Utilizatorul poate vedea o interfata Gamar formata din mai multe panouri plasate in jurul unui ecran principal.
+
+In functie de dispozitiv, utilizatorul poate interactiona cu scena folosind mouse-ul, tastatura sau controalele headset-ului.
+
+\subsection{Interfata principala AR/MR}
+
+In centrul experientei AR/MR se afla ecranul principal de gameplay. In jurul lui sunt afisate mai multe panouri cu informatii utile.
+
+Interfata contine:
+
+\begin{itemize}
+    \item logo-ul Gamar;
+    \item indicator AR Mode;
+    \item ecran principal de gameplay;
+    \item panou cu ally insights;
+    \item panou cu live stats;
+    \item ability tracker;
+    \item informatii despre scor si gold;
+    \item ticker cu update-uri de meci.
+\end{itemize}
+
+Ideea este ca utilizatorul sa simta ca are informatiile importante in jurul jocului, fara sa schimbe constant ecranele.
+
+\subsection{Ally Insights}
+
+Panoul \textbf{Ally Insights} arata informatii despre coechipieri.
+
+Aici pot fi afisate:
+
+\begin{itemize}
+    \item numele jucatorilor aliati;
+    \item KDA-ul lor;
+    \item gold-ul lor;
+    \item statusul lor in meci.
+\end{itemize}
+
+Acest panou ajuta utilizatorul sa inteleaga mai usor care coechipieri sunt puternici si care au nevoie de ajutor.
+
+\subsection{Live Stats}
+
+Panoul \textbf{Live Stats} afiseaza informatii despre performanta jucatorului in timp real.
+
+Exemple de informatii:
+
+\begin{itemize}
+    \item CS per minute;
+    \item gold per minute;
+    \item kill participation.
+\end{itemize}
+
+Aceste statistici ajuta utilizatorul sa isi dea seama cum se descurca in meci.
+
+\subsection{Ability Tracker}
+
+Panoul \textbf{Ability Tracker} arata iconite de abilitati si cooldown-uri.
+
+De exemplu, o abilitate poate aparea ca fiind disponibila in cateva secunde.
+
+Aceasta functie este utila deoarece jucatorul poate urmari mai usor cooldown-urile importante in timpul luptelor.
+
+\subsection{Panouri cu informatii despre meci}
+
+In AR/MR sunt afisate si informatii generale despre meci, cum ar fi:
+
+\begin{itemize}
+    \item kill-uri pentru echipa aliata;
+    \item kill-uri pentru echipa inamica;
+    \item gold pentru echipa aliata;
+    \item gold pentru echipa inamica.
+\end{itemize}
+
+In partea de jos exista si un ticker cu update-uri despre meci, asemanator cu un dashboard esports.
+
+\section{Flow-ul principal al utilizatorului}
+
+Un flow normal pentru utilizator ar fi asa:
+
+\begin{enumerate}
+    \item Utilizatorul deschide aplicatia de telefon.
+    \item Apasa pe \textbf{Open Dashboard}.
+    \item Verifica pagina de profil, rank-ul, winrate-ul si match history-ul.
+    \item In timpul meciului, intra pe pagina \textbf{Live}.
+    \item Pe pagina Live vede informatii despre echipe, iteme recomandate, CS/min si objective timers.
+    \item Pe smartwatch primeste informatii rapide si notificari.
+    \item In AR/MR headset vede panouri 3D cu statistici si update-uri despre meci.
+    \item Dupa meci, intra pe pagina \textbf{Charts} pentru a vedea damage, gold, CS, scoreboard si performance insights.
+\end{enumerate}
+
+Astfel, toate cele trei prototipuri lucreaza impreuna si arata cum Gamar poate ajuta jucatorul inainte, in timpul si dupa un meci.
+
+\section{Interactiuni disponibile in prototipuri}
+
+\subsection{Telefon}
+
+In aplicatia de telefon, utilizatorul poate:
+
+\begin{itemize}
+    \item sa apese pe \textbf{Open Dashboard};
+    \item sa foloseasca bottom navigation bar;
+    \item sa intre pe Profile, Live, Build si Charts;
+    \item sa apese pe meciurile din match history;
+    \item sa apese pe membrii party-ului;
+    \item sa apese pe iteme pentru detalii;
+    \item sa declanseze notificari de item;
+    \item sa deschida objective timer-ul;
+    \item sa revina la pagina de profil.
+\end{itemize}
+
+\subsection{Smartwatch}
+
+In aplicatia de smartwatch, utilizatorul poate:
+
+\begin{itemize}
+    \item sa dea swipe intre ecrane;
+    \item sa apese pe meciuri;
+    \item sa deschida match detail;
+    \item sa vada informatii live;
+    \item sa vada notificari de item;
+    \item sa inchida sau sa deschida notificari.
+\end{itemize}
+
+\subsection{AR/MR Headset}
+
+In prototipul AR/MR, utilizatorul poate:
+
+\begin{itemize}
+    \item sa exploreze interfata spatiala;
+    \item sa vada panourile plutitoare;
+    \item sa urmareasca ally insights;
+    \item sa vada live stats;
+    \item sa urmareasca ability cooldowns;
+    \item sa vada informatii despre scor si gold.
+\end{itemize}
+
+\section{Asset-uri si date folosite}
+
+Prototipul foloseste imagini si date hardcodate.
+
+Exemple de asset-uri folosite:
+
+\begin{itemize}
+    \item \texttt{champion1.png}
+    \item \texttt{champion2.png}
+    \item \texttt{champion3.png}
+    \item \texttt{item1.png}
+    \item \texttt{item2.png}
+    \item \texttt{item3.png}
+    \item \texttt{rank1.png}
+\end{itemize}
+
+Datele despre jucatori, meciuri, KDA, CS, gold, damage, iteme si chart-uri sunt create doar pentru demonstratie.
+
+Aplicatia nu foloseste date reale din League of Legends si nu este conectata la Riot API.
+
+\section{Limitari ale prototipului}
+
+Acest proiect este doar un prototip vizual si interactiv.
+
+Limitari:
+
+\begin{itemize}
+    \item aplicatia nu este conectata la Riot API;
+    \item datele nu sunt reale;
+    \item nu exista un meci live real conectat;
+    \item statisticile sunt hardcodate;
+    \item notificarile sunt simulate;
+    \item smartwatch-ul nu este conectat la un ceas real;
+    \item prototipul AR/MR ruleaza ca o scena A-Frame in browser;
+    \item sistemul nu citeste informatii reale din League of Legends.
+\end{itemize}
+
+Aceste limitari sunt normale pentru un prototip, deoarece scopul proiectului este sa demonstreze conceptul, design-ul si interactiunile principale.
+
+\section{Concluzie}
+
+Gamar este un prototip de companion app pentru League of Legends care functioneaza pe mai multe dispozitive. Aplicatia de telefon ofera cele mai multe informatii si functioneaza ca dashboard principal. Smartwatch-ul ofera informatii rapide si notificari, iar headset-ul AR/MR extinde experienta intr-un spatiu 3D.
+
+Prin aceste prototipuri, Gamar arata cum un jucator ar putea primi informatii utile despre profil, rank, match history, build-uri recomandate, item alerts, objective timers si statistici post-game.
+
+Scopul aplicatiei este sa ajute jucatorul sa ia decizii mai bune, sa inteleaga mai repede ce se intampla in meci si sa isi analizeze performanta dupa terminarea jocului.
+
+\end{document}

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "node-1778497303396",
+    "type": "node",
+    "screen": "Main Screen",
+    "actions": [
+      {
+        "id": "action-1778497303396",
+        "label": "Player Profile",
+        "connections": []
+      },
+      {
+        "id": "action-1778497335640",
+        "label": "Rank",
+        "connections": []
+      },
+      {
+        "id": "action-1778497346119",
+        "label": "Match History",
+        "connections": [
+          {
+            "targetId": "node-1778497323227",
+            "fromPosition": "right",
+            "toPosition": "left"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497355848",
+        "label": "If in-game",
+        "connections": [
+          {
+            "targetId": "node-1778497591319",
+            "fromPosition": "right",
+            "toPosition": "left"
+          }
+        ]
+      },
+      {
+        "id": "action-1778497361363",
+        "label": "Item Alert",
+        "connections": [
+          {
+            "targetId": "node-1778497591319",
+            "fromPosition": "right",
+            "toPosition": "left"
+          }
+        ]
+      }
+    ],
+    "x": 103,
+    "y": 100
+  },
+  {
+    "id": "node-1778497323227",
+    "type": "node",
+    "screen": "Match Review",
+    "actions": [
+      {
+        "id": "action-1778497323227",
+        "label": "Player Review",
+        "connections": []
+      },
+      {
+        "id": "action-1778497496742",
+        "label": "Items Built",
+        "connections": []
+      }
+    ],
+    "x": 656,
+    "y": 62
+  },
+  {
+    "id": "node-1778497591319",
+    "type": "node",
+    "screen": "Live Match",
+    "actions": [
+      {
+        "id": "action-1778497591319",
+        "label": "Player Live Stats",
+        "connections": []
+      },
+      {
+        "id": "action-1778497642134",
+        "label": "Item Recommendation",
+        "connections": []
+      },
+      {
+        "id": "action-1778497699053",
+        "label": "Objective Timers",
+        "connections": []
+      },
+      {
+        "id": "action-1778497706279",
+        "label": "Team Status",
+        "connections": []
+      }
+    ],
+    "x": 658,
+    "y": 402
+  }
+]

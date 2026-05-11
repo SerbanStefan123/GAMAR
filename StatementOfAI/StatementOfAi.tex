@@ -1,0 +1,49 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+\setstretch{1.1}
+
+\title{\textbf{Statement of AI Use}}
+\author{Gamar Project}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+Pentru acest proiect am folosit AI ca suport in procesul de design, implementare si documentare. AI-ul nu a fost folosit pentru a realiza proiectul complet in locul meu, ci pentru a primi ajutor la idei, structura, prompt-uri, debugging si documentatie.
+
+Tool-urile folosite au fost:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{ChatGPT} - folosit pentru brainstorming, organizarea aplicatiei Gamar, scrierea prompt-urilor pentru Figma AI, explicarea cerintelor, rezolvarea unor probleme mici de cod si redactarea user guide-ului.
+    \item \textbf{Figma AI} - folosit pentru generarea prototipurilor high-fidelity si clickable pentru aplicatia de telefon si smartwatch.
+    \item \textbf{Codex} - folosit pentru partea de AR/MR, unde am lucrat cu A-Frame, un framework cu care nu mai lucrasem pana acum.
+\end{itemize}
+
+Cu ajutorul ChatGPT am stabilit principalele ecrane ale aplicatiei de telefon: Profile, Live Game, Build si Charts/Post-Game. Tot ChatGPT m-a ajutat sa formulez prompt-uri pentru Figma AI si sa rezolv probleme legate de asset-uri locale, de exemplu folosirea imaginilor \texttt{champion1.png}, \texttt{item1.png} si \texttt{rank1.png}.
+
+Figma AI a fost folosit pentru a genera vizual ecranele aplicatiei de telefon si smartwatch. Pentru telefon au fost generate ecrane precum onboarding, profile, live game, build si charts. Pentru smartwatch au fost generate ecrane compacte precum profile, ranked, match history, match detail si live game. Design-ul generat a fost verificat si ajustat manual.
+
+Codex a fost folosit pentru prototipul AR/MR realizat in A-Frame. L-am folosit pentru a intelege cum se construieste o scena 3D in browser si cum pot fi pozitionate panouri plutitoare cu informatii precum live stats, ally insights, ability tracker, scor, gold si match updates.
+
+Exemple de prompt-uri folosite:
+
+\begin{quote}
+\textit{Create a high-fidelity clickable mobile app prototype for a League of Legends companion app called Gamar.}
+\end{quote}
+
+\begin{quote}
+\textit{Create a smartwatch prototype for Gamar with swipe navigation between Profile, Ranked, Match History and Live Game screens.}
+\end{quote}
+
+\begin{quote}
+\textit{Help me create an A-Frame AR/MR prototype with floating panels around a central game screen.}
+\end{quote}
+
+Toate deciziile finale legate de design, structura, functionalitati si interactiuni au fost verificate si alese manual de mine. AI-ul a fost folosit doar ca instrument de suport.
+
+\end{document}
